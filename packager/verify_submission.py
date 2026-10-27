@@ -45,7 +45,7 @@ def verify(agent_id: str = "daktari-agent-gauntlet", directory: str = ".") -> bo
 
     # 2. Inspect contents
     forbidden_markers = [".env", "id_rsa", "credentials", ".pem"]
-    required_entries = ["gauntlet_agent", "requirements.txt", "README.md"]
+    required_entries = ["gauntlet_agent", "run_agent.py", "run.sh", "requirements.txt", "README.md", "WRITTEN_SUMMARY.md", "PRESENTATION_DECK.md"]
     found_entries = set()
 
     with tarfile.open(tar_path, "r:gz") as tar:

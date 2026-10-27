@@ -31,8 +31,13 @@ def package(agent_id: str = "daktari-agent-gauntlet", output_dir: str = ".") -> 
     # Directories and files to include
     include_paths = [
         "gauntlet_agent",
+        "run_agent.py",
+        "run.sh",
         "requirements.txt",
+        "Dockerfile",
         "README.md",
+        "WRITTEN_SUMMARY.md",
+        "PRESENTATION_DECK.md",
         "ARCHITECTURE.md",
         "COMPETITION_REQUIREMENTS.md",
         "IMPLEMENTATION_STATUS.md",
@@ -40,6 +45,8 @@ def package(agent_id: str = "daktari-agent-gauntlet", output_dir: str = ".") -> 
         "SDG_IMPACT.md",
         "EVALUATION.md",
         "SUBMISSION_CHECKLIST.md",
+        "DEMO_SCRIPT.md",
+        "PITCH_AND_JUDGE_QA.md",
         "DECISION_LOG.md",
         "NEXT_STEPS.md",
     ]

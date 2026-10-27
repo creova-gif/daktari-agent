@@ -1,12 +1,15 @@
 """
 Command-Line Interface for Daktari AI Gauntlet Runner.
+Supports both stdio subprocess commands and HTTP/SSE URLs.
 Usage:
   python3 -m gauntlet_agent.cli --server-command "python3 tests/mock_blackbox_server.py"
+  python3 -m gauntlet_agent.cli --server-url "http://localhost:8000/sse"
 """
 
 import argparse
 import json
 import logging
+import os
 import shlex
 import sys
 
@@ -20,8 +23,14 @@ def main():
     parser.add_argument(
         "--server-command",
         type=str,
-        required=True,
+        default=os.getenv("MCP_SERVER_COMMAND"),
         help="Command to launch the MCP server subprocess (e.g. 'python3 tests/mock_blackbox_server.py')",
+    )
+    parser.add_argument(
+        "--server-url",
+        type=str,
+        default=os.getenv("MCP_SERVER_URL"),
+        help="Remote MCP server HTTP or SSE URL",
     )
     parser.add_argument(
         "--agent-id",
@@ -41,7 +50,22 @@ def main():
         help="Enable detailed debug logging",
     )
 
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
+
+    # If neither command nor URL was passed via flags, check if positional arguments were passed
+    server_cmd = args.server_command
+    if not server_cmd and not args.server_url and unknown:
+        server_cmd = " ".join(unknown)
+
+    if not server_cmd and not args.server_url:
+        # Default to the practice arena if nothing is specified
+        default_mock = os.path.join(
+            os.path.dirname(__file__), "..", "tests", "mock_blackbox_server.py"
+        )
+        if os.path.exists(default_mock):
+            server_cmd = f"python3 {os.path.abspath(default_mock)}"
+        else:
+            parser.error("Either --server-command or --server-url must be provided.")
 
     log_level = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(
@@ -52,11 +76,14 @@ def main():
     config = GauntletConfig.from_env()
     config.agent_id = args.agent_id
 
-    cmd_parts = shlex.split(args.server_command)
-    client = MCPClient(command=cmd_parts)
-    agent = GauntletAgent(mcp_client=client, config=config)
+    if server_cmd:
+        cmd_parts = shlex.split(server_cmd)
+        client = MCPClient(command=cmd_parts)
+    else:
+        client = MCPClient(server_url=args.server_url)
 
     print(f"=== DAKTARI AI GAUNTLET RUNNER [{args.agent_id}] ===")
+    agent = GauntletAgent(mcp_client=client, config=config)
     result = agent.run(task_description=args.task)
     print("\n=== RUN RESULT ===")
     print(json.dumps(result, indent=2))
