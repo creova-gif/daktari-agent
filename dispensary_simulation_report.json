@@ -1,44 +1,44 @@
 {
   "num_consultations": 1000,
-  "wall_time_sec": 0.0048,
-  "avg_latency_ms": 0.005,
+  "wall_time_sec": 0.0043,
+  "avg_latency_ms": 0.004,
   "crash_rate_pct": 0.0,
   "triage_distribution": {
-    "GREEN": 669,
-    "YELLOW": 9,
-    "RED": 322
+    "GREEN": 662,
+    "YELLOW": 20,
+    "RED": 318
   },
-  "emergency_referrals_count": 322,
+  "emergency_referrals_count": 318,
   "sample_referrals": [
     {
-      "patient_id": "PT-TZ-0001",
-      "dispensary": "Magu Zahanati",
-      "referral_hospital": "Bugando Medical Centre (Mwanza)",
-      "reason": "High Fever (39.8\u00b0C)"
-    },
-    {
-      "patient_id": "PT-TZ-0004",
-      "dispensary": "Hai Dispensary",
-      "referral_hospital": "Kilimanjaro Christian Medical Centre (KCMC)",
-      "reason": "High Fever (39.6\u00b0C)"
-    },
-    {
-      "patient_id": "PT-TZ-0009",
+      "patient_id": "PT-TZ-0003",
       "dispensary": "Mkuranga Mashariki",
       "referral_hospital": "Muhimbili National Hospital (Dar es Salaam)",
       "reason": "High Fever (39.3\u00b0C)"
     },
     {
-      "patient_id": "PT-TZ-0010",
-      "dispensary": "Bahi Zahanati",
-      "referral_hospital": "Benjamin Mkapa Hospital (Dodoma)",
+      "patient_id": "PT-TZ-0006",
+      "dispensary": "Magu Zahanati",
+      "referral_hospital": "Bugando Medical Centre (Mwanza)",
       "reason": "Emergency Danger Sign"
     },
     {
-      "patient_id": "PT-TZ-0016",
-      "dispensary": "Mkuranga Mashariki",
+      "patient_id": "PT-TZ-0011",
+      "dispensary": "Kisarawe Kituo cha Afya",
       "referral_hospital": "Muhimbili National Hospital (Dar es Salaam)",
       "reason": "Emergency Danger Sign"
+    },
+    {
+      "patient_id": "PT-TZ-0012",
+      "dispensary": "Magu Zahanati",
+      "referral_hospital": "Bugando Medical Centre (Mwanza)",
+      "reason": "High Fever (40.1\u00b0C)"
+    },
+    {
+      "patient_id": "PT-TZ-0014",
+      "dispensary": "Mkuranga Mashariki",
+      "referral_hospital": "Muhimbili National Hospital (Dar es Salaam)",
+      "reason": "High Fever (39.2\u00b0C)"
     }
   ]
 }

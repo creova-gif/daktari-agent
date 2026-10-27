@@ -14,7 +14,7 @@ import json
 import logging
 import os
 import time
-from typing import Dict, Any, Tuple
+from typing import Dict, Any, Tuple, Optional, List
 
 from gauntlet_agent.models import ModelAdapter
 from gauntlet_agent.gcp_integration import GoogleCloudBridge, FirestoreConsultationRecord

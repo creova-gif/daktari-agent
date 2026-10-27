@@ -33,6 +33,7 @@ def package(agent_id: str = "daktari-agent-gauntlet", output_dir: str = ".") -> 
         "gauntlet_agent",
         "run_agent.py",
         "run.sh",
+        "verify_all.sh",
         "Makefile",
         "requirements.txt",
         "Dockerfile",

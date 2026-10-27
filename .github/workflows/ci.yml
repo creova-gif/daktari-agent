@@ -23,20 +23,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Run Unit & Integration Test Suite
+      - name: Run Master 6-Stage Qualification Battery
         run: |
-          python -m unittest tests/test_agent_e2e.py
-
-      - name: Run 1000-Point Multi-Scenario Benchmark Suite
-        run: |
-          python tests/benchmark_suite.py
-
-      - name: Run Black Box Practice Arena Verification
-        run: |
-          chmod +x run.sh
-          ./run.sh --server-command "python tests/mock_blackbox_server.py"
-
-      - name: Build & Verify Submission Archive
-        run: |
-          python packager/package_submission.py daktari-agent-gauntlet .
-          python packager/verify_submission.py daktari-agent-gauntlet .
+          chmod +x run.sh verify_all.sh
+          ./verify_all.sh
