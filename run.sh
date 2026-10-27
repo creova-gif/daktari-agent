@@ -5,4 +5,12 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR"
 
+if [ "$1" = "--ui" ] || [ "$1" = "--dashboard" ]; then
+    shift
+    exec python3 -m gauntlet_agent.dashboard "$@"
+elif [ "$1" = "--benchmark" ]; then
+    shift
+    exec python3 tests/benchmark_suite.py "$@"
+fi
+
 exec python3 run_agent.py "$@"

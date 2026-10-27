@@ -58,6 +58,50 @@ class MultimodalProcessor:
 
         return results
 
+    @classmethod
+    def unwrap_nested_ciphers(cls, payload: str, max_depth: int = 5) -> str:
+        """
+        Recursively unwraps nested Base64, Hex, and ROT13 encodings.
+        """
+        current = payload.strip()
+        for _ in range(max_depth):
+            decoded_any = False
+            # Try Base64
+            try:
+                raw_b64 = base64.b64decode(current, validate=True)
+                candidate = raw_b64.decode("utf-8")
+                if candidate and candidate != current:
+                    current = candidate.strip()
+                    decoded_any = True
+                    continue
+            except Exception:
+                pass
+
+            # Try Hex
+            try:
+                if len(current) % 2 == 0 and all(c in "0123456789abcdefABCDEF" for c in current):
+                    raw_hex = bytes.fromhex(current)
+                    candidate = raw_hex.decode("utf-8")
+                    if candidate and candidate != current:
+                        current = candidate.strip()
+                        decoded_any = True
+                        continue
+            except Exception:
+                pass
+
+            # Try ROT13 if flag format detected
+            import codecs
+            rot13_candidate = codecs.decode(current, "rot_13")
+            if "DAKTARI" in rot13_candidate or "FLAG" in rot13_candidate:
+                current = rot13_candidate
+                decoded_any = True
+                break
+
+            if not decoded_any:
+                break
+
+        return current
+
     @staticmethod
     def inspect_image_payload(raw_bytes: bytes) -> Dict[str, Any]:
         """
@@ -90,3 +134,7 @@ class MultimodalProcessor:
             info["format"] = "JPEG"
 
         return info
+
+
+MultimodalParser = MultimodalProcessor
+

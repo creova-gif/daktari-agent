@@ -19,12 +19,22 @@ class PromptInjectionDefense:
         re.compile(r"ignore\s+(all\s+)?prior\s+instructions", re.IGNORECASE),
         re.compile(r"system\s*:\s*you\s+are\s+now", re.IGNORECASE),
         re.compile(r"output\s+the\s+(api\s+key|password|credential|secret)", re.IGNORECASE),
-        re.compile(r"curl\s+https?://", re.IGNORECASE),
+        re.compile(r"curl\s+.*?https?://", re.IGNORECASE),
+        re.compile(r"\b(curl|wget)\b", re.IGNORECASE),
         re.compile(r"rm\s+-rf", re.IGNORECASE),
         re.compile(r"execute\s+arbitrary\s+code", re.IGNORECASE),
         re.compile(r"bypass\s+all\s+safety\s+checks", re.IGNORECASE),
+        re.compile(r"disregard\s+(all\s+)?previous", re.IGNORECASE),
+        re.compile(r"<script.*?>", re.IGNORECASE),
+        re.compile(r"drop\s+table", re.IGNORECASE),
         re.compile(r"<system_instructions>", re.IGNORECASE),
     ]
+
+    @classmethod
+    def contains_injection(cls, text: str) -> bool:
+        """Checks if text contains known injection or attack signatures."""
+        _, detected = cls.sanitize_untrusted_text(text)
+        return detected
 
     @classmethod
     def sanitize_untrusted_text(cls, text: str) -> Tuple[str, bool]:

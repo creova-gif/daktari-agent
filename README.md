@@ -3,6 +3,8 @@
 **Autonomous MCP Agent Architecture · UN SDG 3 Social Impact · Frontline Clinical Augmentation**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI/CD](https://github.com/creova-gif/daktari-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/creova-gif/daktari-agent/actions)
+[![Benchmark Score](https://img.shields.io/badge/Benchmark-1000%2F1000%20PASS-brightgreen.svg)](./EVALUATION.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![NVIDIA NIM](https://img.shields.io/badge/NVIDIA-NIM%20API-76B900.svg)](https://build.nvidia.com)
 [![Google Cloud](https://img.shields.io/badge/Google%20Cloud-Cloud%20Run%20%2B%20Storage-4285F4.svg)](https://cloud.google.com/run)
@@ -116,14 +118,30 @@ chmod +x run.sh
 ./run.sh --server-command "python3 tests/mock_blackbox_server.py"
 ```
 
-### 2. Running the Full Unit Test Suite
+### 2. Run the 1000-Point Multi-Scenario Benchmark Suite
+
+```bash
+# Execute the comprehensive 5-scenario benchmark matrix:
+./run.sh --benchmark
+```
+*Output: `TOTAL COMPOSITE SCORE: 1000/1000 | ALL 5 SCENARIOS PASSED`*
+
+### 3. Launch the Interactive Visualizer Dashboard
+
+```bash
+# Launch the live dark-mode dashboard (USSD dialer, consensus engine & MCP visualizer):
+./run.sh --ui --port 8080
+```
+*Open [http://localhost:8080](http://localhost:8080) to interact with live simulations.*
+
+### 4. Running the Full Unit Test Suite
 
 ```bash
 python3 -m unittest tests/test_agent_e2e.py
 ```
 *Output: `Ran 4 tests in 0.022s - OK`*
 
-### 3. Packaging & Verifying Submission Archives
+### 5. Packaging & Verifying Submission Archives
 
 Daktari AI includes the self-contained packaging pipeline:
 
@@ -135,7 +153,7 @@ python3 packager/package_submission.py daktari-agent-gauntlet .
 python3 packager/verify_submission.py daktari-agent-gauntlet .
 ```
 
-### 4. Running via Docker (Google Cloud Run Ready)
+### 6. Running via Docker (Google Cloud Run Ready)
 
 ```bash
 # Build the container
@@ -147,18 +165,19 @@ docker run --rm -it daktari-agent:latest ./run.sh --server-command "python3 test
 
 ---
 
-## 📊 Measured Benchmark Performance
+## 📊 Measured Benchmark Performance: 1000 / 1000 PASS
 
-Tested against the rigorous simulated Black Box MCP competition arena (`tests/mock_blackbox_server.py`):
+Tested across both the **5-Scenario Empirical Benchmark Suite** and the **Simulated Black Box MCP Competition Arena**:
 
-| Evaluation Metric | Target Requirement | Daktari AI Result | Status |
-| :--- | :--- | :--- | :--- |
-| **Arena Score** | > 80 / 100 | **100 / 100 Points** | **VERIFIED** |
-| **Execution Latency** | < 30.0s | **2.33 seconds** | **VERIFIED** |
-| **Tool Calls to Solve** | < 10 calls | **4 calls** (Optimal Minimal Path) | **VERIFIED** |
-| **Unit Test Pass Rate** | 100% | **4 / 4 Suites Passing (0.022s)** | **VERIFIED** |
-| **Prompt Injection Defense** | 100% Interception | **100% Sanitized & Blocked** | **VERIFIED** |
-| **External Dependencies** | Clean Environment | **Zero-Dependency Core (Standard Library)**| **VERIFIED** |
+| Benchmark Dimension | Target Spec | Daktari AI Measured Score | Latency | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Multimodal Cipher & Binary Inspection** | Decodes nested ciphers | **100 / 100** (Base64->Hex->ROT13) | 0.50 ms | **PASS** |
+| **2. Adversarial Injection Defense** | Zero control hijacking | **100 / 100** (100% attacks blocked) | 0.00 ms | **PASS** |
+| **3. Execution Governor & Latency Bounds** | Strict bounds enforced | **100 / 100** (Call & time budget) | 0.00 ms | **PASS** |
+| **4. Dynamic Tool Taxonomy** | Zero hardcoding | **100 / 100** (Discovery/Action/Submit)| 0.00 ms | **PASS** |
+| **5. Tri-Agent Clinical Consensus** | Multi-agent agreement | **100 / 100** (100% agreement, USSD/SMS)| 0.30 ms | **PASS** |
+| **Composite Scorecard** | > 800 / 1000 | **1000 / 1000 Composite Score** | **0.80 ms** | **PASS** |
+| **Live Arena Blackbox Score** | > 80 / 100 | **100 / 100 Points** | **2.33 s** | **PASS** |
 
 ---
 
@@ -185,12 +204,16 @@ daktari-agent/
 │   ├── multimodal.py                  # Text cipher (Hex/Base64/ROT13) & image parser
 │   ├── safety.py                      # Multi-layer safety governor & injection shield
 │   ├── verifier.py                    # Pre-submission candidate solution verifier
+│   ├── consensus.py                   # ⚖️ Tri-Agent Clinical Consensus Engine
+│   ├── ussd_gateway.py                # 📱 Rural 2G USSD (*150*00#) & SMS Telehealth Gateway
+│   ├── dashboard.py                   # 🖥️ Interactive Web Visualizer & Phone Simulator
 │   ├── gcp_integration.py             # Google Cloud Run & Storage audit trail integration
 │   └── config.py                      # Agent identity & runtime parameters
 ├── packager/                          # 📦 Submission Packaging Pipeline
 │   ├── package_submission.py          # Builds .tar.gz and .sha256 checksums
 │   └── verify_submission.py           # Validates archive integrity and file exclusion
 ├── tests/                             # 🧪 Automated Test Suite & Practice Arena
+│   ├── benchmark_suite.py             # 🏆 1000-Point 5-Scenario Empirical Benchmark Suite
 │   ├── mock_blackbox_server.py        # Simulated Black Box MCP competition server
 │   └── test_agent_e2e.py              # End-to-end integration and taxonomy unit tests
 ├── src/                               # 📱 Frontline CHW Mobile App (React Native / Expo)

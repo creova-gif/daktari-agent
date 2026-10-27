@@ -45,6 +45,7 @@ def package(agent_id: str = "daktari-agent-gauntlet", output_dir: str = ".") -> 
         "SECURITY_AND_SAFETY.md",
         "SDG_IMPACT.md",
         "EVALUATION.md",
+        "benchmark_results.json",
         "SUBMISSION_CHECKLIST.md",
         "DEMO_SCRIPT.md",
         "PITCH_AND_JUDGE_QA.md",

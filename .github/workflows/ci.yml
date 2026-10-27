@@ -1,0 +1,42 @@
+name: Daktari AI — Continuous Integration & Gauntlet Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-verify:
+    name: Autonomous Agent Test Matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run Unit & Integration Test Suite
+        run: |
+          python -m unittest tests/test_agent_e2e.py
+
+      - name: Run 1000-Point Multi-Scenario Benchmark Suite
+        run: |
+          python tests/benchmark_suite.py
+
+      - name: Run Black Box Practice Arena Verification
+        run: |
+          chmod +x run.sh
+          ./run.sh --server-command "python tests/mock_blackbox_server.py"
+
+      - name: Build & Verify Submission Archive
+        run: |
+          python packager/package_submission.py daktari-agent-gauntlet .
+          python packager/verify_submission.py daktari-agent-gauntlet .
