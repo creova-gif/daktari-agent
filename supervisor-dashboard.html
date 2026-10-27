@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daktari Agent — Dashibodi ya Msimamizi</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0D1117;
+  --surface: #161B22;
+  --s2:      #1C2230;
+  --border:  rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --green:   #3FB950;
+  --green-d: #196127;
+  --amber:   #D29922;
+  --red:     #F85149;
+  --blue:    #58A6FF;
+  --ink:     #E6EDF3;
+  --muted:   rgba(230,237,243,0.6);
+  --dim:     rgba(230,237,243,0.35);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh;}
+
+/* Sidebar */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:1.5rem;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.brand{display:flex;align-items:center;gap:.75rem;padding:.5rem;border-bottom:1px solid var(--border);padding-bottom:1.25rem;}
+.brand-icon{width:36px;height:36px;background:var(--green-d);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.brand-name{font-size:.9rem;font-weight:700;color:var(--ink);}
+.brand-sub{font-size:.65rem;color:var(--dim);margin-top:1px;}
+
+.nav-section{display:flex;flex-direction:column;gap:4px;}
+.nav-label{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);padding:.5rem .75rem .25rem;font-weight:600;}
+.nav-item{display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;border-radius:6px;font-size:.85rem;cursor:pointer;color:var(--muted);transition:all .15s;border:none;background:none;text-align:left;width:100%;}
+.nav-item:hover{background:rgba(255,255,255,.05);color:var(--ink);}
+.nav-item.active{background:var(--green-d);color:var(--green);font-weight:600;}
+.nav-icon{font-size:16px;width:20px;text-align:center;}
+
+.sidebar-footer{margin-top:auto;padding-top:1rem;border-top:1px solid var(--border);}
+.online-badge{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--dim);padding:.5rem;}
+.online-dot{width:7px;height:7px;border-radius:50%;background:var(--green);}
+
+/* Main */
+.main{padding:2rem;overflow-y:auto;}
+.page-header{margin-bottom:2rem;}
+.page-title{font-size:1.6rem;font-weight:700;letter-spacing:-.02em;}
+.page-sub{font-size:.88rem;color:var(--muted);margin-top:.25rem;}
+.page-meta{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--dim);margin-top:.5rem;}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent,var(--green));}
+.stat-val{font-size:2.2rem;font-weight:800;line-height:1;margin-bottom:.3rem;}
+.stat-label{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;font-weight:600;}
+.stat-trend{font-size:.75rem;color:var(--muted);margin-top:.4rem;}
+
+/* Section */
+.section{margin-bottom:2.5rem;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.section-title{font-size:1rem;font-weight:600;}
+.section-badge{background:var(--s2);border:1px solid var(--border);border-radius:999px;padding:.2rem .7rem;font-size:.72rem;color:var(--dim);font-family:'JetBrains Mono',monospace;}
+
+/* CHW Table */
+.chw-table{width:100%;border-collapse:collapse;}
+.chw-table th{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:.6rem 1rem;border-bottom:1px solid var(--border2);text-align:left;font-weight:600;}
+.chw-table td{padding:.75rem 1rem;border-bottom:1px solid var(--border);font-size:.85rem;vertical-align:middle;}
+.chw-table tr:hover td{background:rgba(255,255,255,.02);}
+.chw-name{font-weight:600;color:var(--ink);}
+.chw-id{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--dim);}
+
+/* Wellbeing bar */
+.wb-bar-wrap{width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;}
+.wb-bar{height:100%;border-radius:3px;transition:width .5s;}
+
+/* Alert cards */
+.alert-list{display:flex;flex-direction:column;gap:.75rem;}
+.alert-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start;}
+.alert-card.emergency{border-color:var(--red);background:rgba(248,81,73,.05);}
+.alert-card.high{border-color:var(--amber);background:rgba(210,153,34,.05);}
+.alert-icon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem;}
+.alert-body{flex:1;}
+.alert-title{font-weight:600;font-size:.88rem;margin-bottom:.25rem;}
+.alert-time{font-size:.72rem;color:var(--dim);font-family:'JetBrains Mono',monospace;}
+.alert-desc{font-size:.8rem;color:var(--muted);margin-top:.25rem;line-height:1.5;}
+.alert-resolve{padding:.35rem .85rem;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);transition:all .15s;flex-shrink:0;}
+.alert-resolve:hover{background:var(--green-d);color:var(--green);border-color:var(--green);}
+
+/* Pills */
+.pill{display:inline-block;padding:.15rem .55rem;border-radius:999px;font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+.pill-green{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3);}
+.pill-amber{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.3);}
+.pill-red{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3);}
+.pill-blue{background:rgba(88,166,255,.15);color:var(--blue);border:1px solid rgba(88,166,255,.3);}
+
+/* Loading */
+.loading-wrap{display:flex;align-items:center;justify-content:center;height:200px;gap:.75rem;color:var(--dim);}
+.spinner{width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Empty */
+.empty{text-align:center;padding:3rem;color:var(--dim);}
+.empty-icon{font-size:2.5rem;margin-bottom:.75rem;}
+
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🩺</div>
+      <div>
+        <div class="brand-name">Daktari Agent</div>
+        <div class="brand-sub">Supervisor Dashboard</div>
+      </div>
+    </div>
+
+    <nav class="nav-section">
+      <div class="nav-label">Mwongozo</div>
+      <button class="nav-item active" onclick="showPage('overview')">
+        <span class="nav-icon">📊</span> Muhtasari
+      </button>
+      <button class="nav-item" onclick="showPage('chws')">
+        <span class="nav-icon">👥</span> Wahudumu (CHWs)
+      </button>
+      <button class="nav-item" onclick="showPage('alerts')">
+        <span class="nav-icon">🔔</span> Arifa
+        <span id="alert-count-badge" style="margin-left:auto;background:var(--red);color:#fff;border-radius:999px;padding:1px 7px;font-size:.65rem;font-weight:700;display:none;">0</span>
+      </button>
+      <button class="nav-item" onclick="showPage('visits')">
+        <span class="nav-icon">📋</span> Ziara za Leo
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="online-badge">
+        <div class="online-dot" id="conn-dot"></div>
+        <span id="conn-label">Inaungana...</span>
+      </div>
+      <div style="font-size:.7rem;color:var(--dim);padding:.5rem;">
+        <div id="supervisor-name">...</div>
+        <div id="supervisor-district" style="margin-top:2px;">...</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- OVERVIEW PAGE -->
+    <div id="page-overview">
+      <div class="page-header">
+        <div class="page-title">Dashibodi ya Wilaya</div>
+        <div class="page-sub">Muhtasari wa shughuli za CHW leo</div>
+        <div class="page-meta" id="last-refresh">Inasasisha...</div>
+      </div>
+
+      <div class="stats-grid" id="stats-grid">
+        <div class="loading-wrap" style="grid-column:1/-1"><div class="spinner"></div><span>Inapakia takwimu...</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">Arifa za Dharura</div>
+          <span class="section-badge" id="emergency-count-label">0 wazi</span>
+        </div>
+        <div id="emergency-alerts-list" class="alert-list">
+          <div class="empty"><div class="empty-icon">✅</div>Hakuna arifa za dharura</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHWs PAGE -->
+    <div id="page-chws" style="display:none;">
+      <div class="page-header">
+        <div class="page-title">Wahudumu wa Jamii</div>
+        <div class="page-sub">Hali ya CHW wote katika wilaya yako</div>
+      </div>
+      <div class="section">
+        <div id="chw-table-wrap">
+          <div class="loading-wrap"><div class="spinner"></div><span>Inapakia...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERTS PAGE -->
+    <div id="page-alerts" style="display:none;">
+      <div class="page-header">
+        <div class="page-title">Arifa Zote</div>
+        <div class="page-sub">Arifa za hivi karibuni zinazohitaji hatua</div>
+      </div>
+      <div id="all-alerts-list" class="alert-list">
+        <div class="loading-wrap"><div class="spinner"></div><span>Inapakia...</span></div>
+      </div>
+    </div>
+
+    <!-- VISITS PAGE -->
+    <div id="page-visits" style="display:none;">
+      <div class="page-header">
+        <div class="page-title">Ziara za Leo</div>
+        <div class="page-sub">Ziara zote zilizofanywa leo katika wilaya yako</div>
+      </div>
+      <div id="today-visits-wrap">
+        <div class="loading-wrap"><div class="spinner"></div><span>Inapakia...</span></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ─── Config ────────────────────────────────────────────────────────────────
+// Replace with your actual values or load from environment
+const SUPABASE_URL = window.__SUPABASE_URL__ || 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = window.__SUPABASE_KEY__ || 'your_anon_key';
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ─── State ─────────────────────────────────────────────────────────────────
+let currentUser = null;
+let chwProfile = null;
+let currentPage = 'overview';
+
+// ─── Navigation ─────────────────────────────────────────────────────────────
+function showPage(page) {
+  ['overview','chws','alerts','visits'].forEach(p => {
+    document.getElementById(`page-${p}`).style.display = p === page ? 'block' : 'none';
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.trim().includes(
+        { overview:'Muhtasari', chws:'Wahudumu', alerts:'Arifa', visits:'Ziara' }[p]
+      ));
+    });
+  });
+  currentPage = page;
+  if (page === 'chws')   loadCHWTable();
+  if (page === 'alerts') loadAllAlerts();
+  if (page === 'visits') loadTodayVisits();
+}
+
+// ─── Auth ───────────────────────────────────────────────────────────────────
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    // Redirect to login or show login form
+    document.querySelector('.main').innerHTML = `
+      <div style="max-width:400px;margin:4rem auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;">
+        <h2 style="margin-bottom:.5rem;">Ingia — Msimamizi</h2>
+        <p style="color:var(--dim);font-size:.85rem;margin-bottom:1.5rem;">Daktari Agent Supervisor Dashboard</p>
+        <input type="tel" id="login-phone" placeholder="+255 712 000 001" style="width:100%;padding:.75rem;background:var(--s2);border:1px solid var(--border2);border-radius:8px;color:var(--ink);font-size:.9rem;margin-bottom:.75rem;">
+        <input type="password" id="login-pass" placeholder="Nenosiri" style="width:100%;padding:.75rem;background:var(--s2);border:1px solid var(--border2);border-radius:8px;color:var(--ink);font-size:.9rem;margin-bottom:1rem;">
+        <button onclick="doLogin()" style="width:100%;padding:.85rem;background:var(--green);border:none;border-radius:8px;color:#fff;font-size:.95rem;font-weight:700;cursor:pointer;">Ingia →</button>
+        <div id="login-err" style="color:var(--red);font-size:.8rem;margin-top:.75rem;"></div>
+      </div>`;
+    return;
+  }
+
+  currentUser = session.user;
+  await loadSupervisorProfile();
+  loadOverview();
+  loadAlertCount();
+
+  // Realtime: subscribe to new supervisor alerts
+  sb.channel('supervisor-alerts')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'supervisor_alerts' }, () => {
+      loadAlertCount();
+      if (currentPage === 'alerts') loadAllAlerts();
+      if (currentPage === 'overview') loadOverview();
+    })
+    .subscribe();
+
+  // Auto-refresh every 60s
+  setInterval(() => {
+    if (currentPage === 'overview') loadOverview();
+  }, 60_000);
+}
+
+async function doLogin() {
+  const phone = document.getElementById('login-phone').value;
+  const pass  = document.getElementById('login-pass').value;
+  const { error } = await sb.auth.signInWithPassword({ phone, password: pass });
+  if (error) { document.getElementById('login-err').textContent = error.message; return; }
+  location.reload();
+}
+
+async function loadSupervisorProfile() {
+  const { data } = await sb.from('chw_profiles')
+    .select('*').eq('auth_user_id', currentUser.id).single();
+  if (data) {
+    chwProfile = data;
+    document.getElementById('supervisor-name').textContent = data.full_name;
+    document.getElementById('supervisor-district').textContent =
+      `Wilaya: ${data.district.replace('_',' ').toUpperCase()}`;
+    document.getElementById('conn-dot').style.background = 'var(--green)';
+    document.getElementById('conn-label').textContent = 'Umeungana';
+  }
+}
+
+// ─── Overview ───────────────────────────────────────────────────────────────
+async function loadOverview() {
+  if (!chwProfile) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  const [chws, visitsToday, emergencies, openAlerts] = await Promise.all([
+    sb.from('chw_profiles').select('id,wellbeing_score').eq('district', chwProfile.district).neq('id', chwProfile.id),
+    sb.from('clinical_visits').select('id', {count:'exact',head:true})
+      .gte('created_at', today.toISOString()),
+    sb.from('ai_recommendations').select('id', {count:'exact',head:true})
+      .eq('emergency_flag', true).gte('created_at', today.toISOString()),
+    sb.from('supervisor_alerts').select('id', {count:'exact',head:true})
+      .eq('supervisor_id', chwProfile.id).eq('status','open'),
+  ]);
+
+  const chwList = chws.data ?? [];
+  const atRisk = chwList.filter(c => c.wellbeing_score < 40).length;
+
+  document.getElementById('stats-grid').innerHTML = `
+    ${statCard('CHW Wanaofanya Kazi', chwList.length, '👥', 'var(--blue)')}
+    ${statCard('Ziara Leo', visitsToday.count ?? 0, '🩺', 'var(--green)')}
+    ${statCard('Dharura Leo', emergencies.count ?? 0, '🚨', emergencies.count > 0 ? 'var(--red)' : 'var(--green)')}
+    ${statCard('CHW Wanahitaji Msaada', atRisk, '⚠️', atRisk > 0 ? 'var(--amber)' : 'var(--green)')}
+  `;
+
+  document.getElementById('last-refresh').textContent =
+    `Imesasishwa: ${new Date().toLocaleTimeString('sw-TZ')}`;
+
+  // Emergency alerts
+  const { data: alerts } = await sb.from('supervisor_alerts')
+    .select('*').eq('supervisor_id', chwProfile.id)
+    .in('severity', ['emergency','high']).eq('status','open')
+    .order('created_at', {ascending:false}).limit(5);
+
+  const alertEl = document.getElementById('emergency-alerts-list');
+  document.getElementById('emergency-count-label').textContent =
+    `${(alerts??[]).length} wazi`;
+
+  alertEl.innerHTML = (alerts && alerts.length > 0)
+    ? alerts.map(a => alertCard(a)).join('')
+    : `<div class="empty"><div class="empty-icon">✅</div>Hakuna arifa za dharura sasa hivi</div>`;
+}
+
+function statCard(label, value, icon, accent) {
+  return `<div class="stat-card" style="--accent:${accent}">
+    <div class="stat-val">${value}</div>
+    <div class="stat-label">${icon} ${label}</div>
+  </div>`;
+}
+
+function alertCard(a) {
+  const sev = a.severity === 'emergency' ? 'emergency' : a.severity === 'high' ? 'high' : '';
+  const icon = { emergency:'🚨', high:'⚠️', medium:'ℹ️', low:'💚' }[a.severity] ?? '•';
+  const time = new Date(a.created_at).toLocaleTimeString('sw-TZ',{hour:'2-digit',minute:'2-digit'});
+  return `<div class="alert-card ${sev}">
+    <div class="alert-icon">${icon}</div>
+    <div class="alert-body">
+      <div class="alert-title">${a.title}</div>
+      <div class="alert-time">${time}</div>
+      <div class="alert-desc">${a.body}</div>
+    </div>
+    <button class="alert-resolve" onclick="resolveAlert('${a.id}', this)">Tatua</button>
+  </div>`;
+}
+
+async function resolveAlert(id, btn) {
+  btn.textContent = '...';
+  await sb.from('supervisor_alerts').update({status:'resolved', resolved_at: new Date().toISOString()}).eq('id',id);
+  btn.closest('.alert-card').style.opacity = '0.4';
+  btn.disabled = true;
+  btn.textContent = '✓';
+  loadAlertCount();
+}
+
+// ─── Alert Count Badge ───────────────────────────────────────────────────────
+async function loadAlertCount() {
+  if (!chwProfile) return;
+  const { count } = await sb.from('supervisor_alerts')
+    .select('id', {count:'exact',head:true})
+    .eq('supervisor_id', chwProfile.id).eq('status','open');
+  const badge = document.getElementById('alert-count-badge');
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'inline' : 'none';
+}
+
+// ─── CHW Table ───────────────────────────────────────────────────────────────
+async function loadCHWTable() {
+  if (!chwProfile) return;
+  const { data: chws } = await sb.from('chw_dashboard_stats')
+    .select('*').eq('district', chwProfile.district);
+
+  if (!chws || chws.length === 0) {
+    document.getElementById('chw-table-wrap').innerHTML =
+      '<div class="empty"><div class="empty-icon">👥</div>Hakuna CHW katika wilaya yako bado.</div>';
+    return;
+  }
+
+  const rows = chws.map(c => {
+    const score = c.wellbeing_score ?? 100;
+    const tier = score >= 80 ? 'pill-green' : score >= 60 ? 'pill-blue' : score >= 40 ? 'pill-amber' : 'pill-red';
+    const tierLabel = score >= 80 ? 'Nzuri Sana' : score >= 60 ? 'Nzuri' : score >= 40 ? 'Wastani' : 'Hatarini';
+    const barColor = score >= 80 ? 'var(--green)' : score >= 60 ? 'var(--blue)' : score >= 40 ? 'var(--amber)' : 'var(--red)';
+    return `<tr>
+      <td><div class="chw-name">${c.full_name}</div><div class="chw-id">${c.chw_id}</div></td>
+      <td>${c.visits_today ?? 0}</td>
+      <td>${c.visits_this_week ?? 0}</td>
+      <td>${c.open_visits ?? 0}</td>
+      <td>${c.emergencies_this_week ?? 0}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="wb-bar-wrap" style="width:80px;">
+            <div class="wb-bar" style="width:${score}%;background:${barColor}"></div>
+          </div>
+          <span style="font-size:.75rem;color:var(--dim)">${score}</span>
+          <span class="pill ${tier}">${tierLabel}</span>
+        </div>
+      </td>
+      <td>
+        <span class="pill ${c.ai_agreement_rate_pct >= 80 ? 'pill-green' : c.ai_agreement_rate_pct >= 60 ? 'pill-amber' : 'pill-red'}">
+          ${c.ai_agreement_rate_pct ?? '—'}%
+        </span>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('chw-table-wrap').innerHTML = `
+    <div style="overflow-x:auto;">
+      <table class="chw-table">
+        <thead><tr>
+          <th>CHW</th><th>Ziara Leo</th><th>Wiki Hii</th>
+          <th>Wazi</th><th>Dharura</th><th>Ustawi</th><th>Makubaliano na AI</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ─── All Alerts ──────────────────────────────────────────────────────────────
+async function loadAllAlerts() {
+  if (!chwProfile) return;
+  const { data: alerts } = await sb.from('supervisor_alerts')
+    .select('*').eq('supervisor_id', chwProfile.id)
+    .order('created_at', {ascending:false}).limit(30);
+
+  document.getElementById('all-alerts-list').innerHTML =
+    (alerts && alerts.length > 0)
+      ? alerts.map(a => alertCard(a)).join('')
+      : '<div class="empty"><div class="empty-icon">🔔</div>Hakuna arifa.</div>';
+}
+
+// ─── Today Visits ────────────────────────────────────────────────────────────
+async function loadTodayVisits() {
+  if (!chwProfile) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const { data: visits } = await sb.from('clinical_visits')
+    .select('*, patients(full_name,village), ai_recommendations(likely_diagnosis_sw,risk_level,emergency_flag), chw_profiles!chw_id(full_name)')
+    .gte('created_at', today.toISOString())
+    .order('created_at', {ascending:false})
+    .limit(50);
+
+  if (!visits || visits.length === 0) {
+    document.getElementById('today-visits-wrap').innerHTML =
+      '<div class="empty"><div class="empty-icon">📋</div>Hakuna ziara leo bado.</div>';
+    return;
+  }
+
+  const rows = visits.map(v => {
+    const ar = v.ai_recommendations?.[0];
+    const riskColor = {emergency:'var(--red)',high:'var(--amber)',medium:'var(--blue)',low:'var(--green)'}[ar?.risk_level] ?? 'var(--dim)';
+    const time = new Date(v.created_at).toLocaleTimeString('sw-TZ',{hour:'2-digit',minute:'2-digit'});
+    return `<tr>
+      <td>${time}</td>
+      <td><b>${v.patients?.full_name ?? '—'}</b><br><span style="font-size:.75rem;color:var(--dim)">${v.patients?.village ?? ''}</span></td>
+      <td style="color:var(--dim);font-size:.82rem;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${v.chief_complaint_sw}</td>
+      <td style="font-size:.82rem;max-width:200px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${ar?.likely_diagnosis_sw ?? '—'}</td>
+      <td><span style="color:${riskColor};font-weight:700;font-size:.75rem;text-transform:uppercase">${ar?.risk_level ?? '—'}${ar?.emergency_flag ? ' 🚨' : ''}</span></td>
+      <td style="color:var(--dim);font-size:.82rem">${v.chw_profiles?.full_name ?? '—'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('today-visits-wrap').innerHTML = `
+    <div style="overflow-x:auto;">
+      <table class="chw-table">
+        <thead><tr><th>Wakati</th><th>Mgonjwa</th><th>Malalamiko</th><th>Utambuzi wa AI</th><th>Hatari</th><th>CHW</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ─── Boot ─────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

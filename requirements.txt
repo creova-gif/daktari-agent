@@ -1,0 +1,12 @@
+# Daktari Agent — Python server dependencies
+# Install: pip install -r requirements.txt
+
+supabase>=2.4.0
+numpy>=1.26.0
+python-dotenv>=1.0.0
+anthropic>=0.39.0   # for server-side Claude API calls (USSD triage, etc.)
+
+# Optional — for production LoRA weight aggregation:
+# torch>=2.2.0
+# transformers>=4.40.0
+# peft>=0.10.0       # LoRA adapter management
