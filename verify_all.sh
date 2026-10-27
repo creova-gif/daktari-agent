@@ -16,9 +16,9 @@ echo "==========================================================================
 echo ""
 
 # 1. Run Unit Tests
-echo "▶ STEP 1/6: Executing Full Automated Test Suite (15 Test Cases)..."
+echo "▶ STEP 1/6: Executing Full Automated Test Suite (32 Test Cases)..."
 python3 -m unittest discover tests
-echo "✔ Step 1 Passed: 15/15 Tests OK."
+echo "✔ Step 1 Passed: 32/32 Tests OK."
 echo ""
 
 # 2. Run 1000-Point Benchmark

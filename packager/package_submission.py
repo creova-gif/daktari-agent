@@ -42,6 +42,7 @@ def package(agent_id: str = "daktari-agent-gauntlet", output_dir: str = ".") -> 
         "PRESENTATION_DECK.md",
         "CEO_PLAN_REVIEW.md",
         "GOOGLE_CLOUD_NVIDIA_SYNERGY.md",
+        "PAN_AFRICAN_EXPANSION.md",
         "ARCHITECTURE.md",
         "COMPETITION_REQUIREMENTS.md",
         "IMPLEMENTATION_STATUS.md",

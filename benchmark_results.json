@@ -2,15 +2,15 @@
   "scaled_score_1000": 1000,
   "total_score": 500,
   "max_possible": 500,
-  "total_latency_seconds": 0.0002,
+  "total_latency_seconds": 0.0005,
   "scenarios": [
     {
       "scenario": "1. Multimodal Cipher & Binary Inspection",
       "score": 100,
       "max_score": 100,
-      "latency_sec": 0.0001,
+      "latency_sec": 0.0004,
       "status": "PASS",
-      "details": "Unwrapped 3-stage nested cipher (Base64->Hex->ROT13) in 0.13ms"
+      "details": "Unwrapped 3-stage nested cipher (Base64->Hex->ROT13) in 0.43ms"
     },
     {
       "scenario": "2. Adversarial Prompt Injection Defense",

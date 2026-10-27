@@ -20,6 +20,7 @@
 
 | Deliverable | Description | Link |
 | :--- | :--- | :--- |
+| **Pan-African Expansion Architecture** | Scaling clinical AI to 1.2M CHWs across 48 Sub-Saharan African countries with USSD, stockout fallbacks, and 7-language NLP. | [`PAN_AFRICAN_EXPANSION.md`](./PAN_AFRICAN_EXPANSION.md) |
 | **Google Cloud + NVIDIA Synergy** | Deep technical breakdown of Cloud Run, Firestore, GCS, BigQuery, and NVIDIA NIM Llama 70B. | [`GOOGLE_CLOUD_NVIDIA_SYNERGY.md`](./GOOGLE_CLOUD_NVIDIA_SYNERGY.md) |
 | **GStack CEO Plan Review** | Founder-mode selective expansion review across 11 architectural dimensions. | [`CEO_PLAN_REVIEW.md`](./CEO_PLAN_REVIEW.md) |
 | **3-Page Written Summary** | Full research grounding, architecture, GCP+NVIDIA synergy, timeline, risk matrix, and evaluation. | [`WRITTEN_SUMMARY.md`](./WRITTEN_SUMMARY.md) |
@@ -144,14 +145,21 @@ chmod +x run.sh
 ```
 *Open [http://localhost:8080](http://localhost:8080) to interact with live simulations.*
 
-### 4. Running the Full Unit Test Suite
+### 4. Running the Full Unit Test Suite (32 Tests in 0.024s)
 
 ```bash
-python3 -m unittest tests/test_agent_e2e.py
+python3 -m unittest discover tests
 ```
-*Output: `Ran 4 tests in 0.022s - OK`*
+*Output: `Ran 32 tests in 0.024s - OK` (covers E2E agent, Black Box arena, Tri-Agent Consensus, 2G USSD, Voice acoustic analysis, Federated Learning, mRDT vision classification, DHIS2 export, Pan-African multilingual NLP, Essential Medicines stockouts, Maternal-Pediatric triage, and 2G SMS bit-compression).*
 
-### 5. Packaging & Verifying Submission Archives
+### 5. Running the Master End-to-End Qualification Battery
+
+```bash
+./verify_all.sh
+```
+*Executes all 6 qualification stages in sequence: (1) 32 Unit Tests, (2) 1000/1000 Benchmark Matrix, (3) Black Box Arena, (4) 1,000-Consultation Dispensary Simulation, (5) GCP + NVIDIA Synergy Pipeline, and (6) Archive Packaging & SHA-256 Verification.*
+
+### 6. Packaging & Verifying Submission Archives
 
 Daktari AI includes the self-contained packaging pipeline:
 
@@ -163,7 +171,7 @@ python3 packager/package_submission.py daktari-agent-gauntlet .
 python3 packager/verify_submission.py daktari-agent-gauntlet .
 ```
 
-### 6. Running via Docker (Google Cloud Run Ready)
+### 7. Running via Docker (Google Cloud Run Ready)
 
 ```bash
 # Build the container

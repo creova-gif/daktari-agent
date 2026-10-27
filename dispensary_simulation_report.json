@@ -1,44 +1,44 @@
 {
   "num_consultations": 1000,
-  "wall_time_sec": 0.0043,
-  "avg_latency_ms": 0.004,
+  "wall_time_sec": 0.0051,
+  "avg_latency_ms": 0.005,
   "crash_rate_pct": 0.0,
   "triage_distribution": {
-    "GREEN": 662,
-    "YELLOW": 20,
-    "RED": 318
+    "GREEN": 660,
+    "YELLOW": 17,
+    "RED": 323
   },
-  "emergency_referrals_count": 318,
+  "emergency_referrals_count": 323,
   "sample_referrals": [
     {
+      "patient_id": "PT-TZ-0002",
+      "dispensary": "Mvomero Kituo cha Afya",
+      "referral_hospital": "Morogoro Regional Referral Hospital",
+      "reason": "Emergency Danger Sign"
+    },
+    {
       "patient_id": "PT-TZ-0003",
-      "dispensary": "Mkuranga Mashariki",
+      "dispensary": "Bagamoyo Zahanati",
       "referral_hospital": "Muhimbili National Hospital (Dar es Salaam)",
       "reason": "High Fever (39.3\u00b0C)"
     },
     {
-      "patient_id": "PT-TZ-0006",
-      "dispensary": "Magu Zahanati",
-      "referral_hospital": "Bugando Medical Centre (Mwanza)",
-      "reason": "Emergency Danger Sign"
-    },
-    {
-      "patient_id": "PT-TZ-0011",
-      "dispensary": "Kisarawe Kituo cha Afya",
-      "referral_hospital": "Muhimbili National Hospital (Dar es Salaam)",
-      "reason": "Emergency Danger Sign"
-    },
-    {
-      "patient_id": "PT-TZ-0012",
-      "dispensary": "Magu Zahanati",
-      "referral_hospital": "Bugando Medical Centre (Mwanza)",
-      "reason": "High Fever (40.1\u00b0C)"
-    },
-    {
-      "patient_id": "PT-TZ-0014",
+      "patient_id": "PT-TZ-0004",
       "dispensary": "Mkuranga Mashariki",
       "referral_hospital": "Muhimbili National Hospital (Dar es Salaam)",
-      "reason": "High Fever (39.2\u00b0C)"
+      "reason": "High Fever (38.7\u00b0C)"
+    },
+    {
+      "patient_id": "PT-TZ-0010",
+      "dispensary": "Kilosa Zahanati",
+      "referral_hospital": "Morogoro Regional Referral Hospital",
+      "reason": "High Fever (40.3\u00b0C)"
+    },
+    {
+      "patient_id": "PT-TZ-0013",
+      "dispensary": "Kibaha Vijijini",
+      "referral_hospital": "Muhimbili National Hospital (Dar es Salaam)",
+      "reason": "High Fever (40.0\u00b0C)"
     }
   ]
 }
