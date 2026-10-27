@@ -15,6 +15,7 @@ help:
 	@echo "  make ui          - Launch interactive web visualizer dashboard (port 8080)"
 	@echo "  make tui         - Launch rich terminal console monitor with EKG display"
 	@echo "  make simulate    - Run 1,000-consultation nationwide dispensary stress test"
+	@echo "  make cloud-demo  - Execute live Google Cloud + NVIDIA hybrid synergy demo"
 	@echo "  make package     - Generate compliant competition submission archive & sha256"
 	@echo "  make verify      - Validate archive checksum and secret cleanliness"
 	@echo "  make docker      - Build production container for Google Cloud Run"
@@ -38,6 +39,9 @@ tui:
 
 simulate:
 	$(PYTHON) tests/dispensary_simulator.py 1000
+
+cloud-demo:
+	$(PYTHON) -m gauntlet_agent.cloud_synergy
 
 package:
 	$(PYTHON) packager/package_submission.py $(AGENT_ID) .

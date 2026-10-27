@@ -44,6 +44,7 @@ wheels/
 *.egg
 
 # System & IDE
+.gcp_cache/
 .DS_Store
 .idea/
 .vscode/

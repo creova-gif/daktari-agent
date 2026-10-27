@@ -20,6 +20,8 @@
 
 | Deliverable | Description | Link |
 | :--- | :--- | :--- |
+| **Google Cloud + NVIDIA Synergy** | Deep technical breakdown of Cloud Run, Firestore, GCS, BigQuery, and NVIDIA NIM Llama 70B. | [`GOOGLE_CLOUD_NVIDIA_SYNERGY.md`](./GOOGLE_CLOUD_NVIDIA_SYNERGY.md) |
+| **GStack CEO Plan Review** | Founder-mode selective expansion review across 11 architectural dimensions. | [`CEO_PLAN_REVIEW.md`](./CEO_PLAN_REVIEW.md) |
 | **3-Page Written Summary** | Full research grounding, architecture, GCP+NVIDIA synergy, timeline, risk matrix, and evaluation. | [`WRITTEN_SUMMARY.md`](./WRITTEN_SUMMARY.md) |
 | **8-Slide Presentation & Script** | 8-slide deck layout + 5-minute recorded presentation script with exact cue times. | [`PRESENTATION_DECK.md`](./PRESENTATION_DECK.md) |
 | **System Architecture** | Technical breakdown of the 5-phase autonomous control loop and MCP client. | [`ARCHITECTURE.md`](./ARCHITECTURE.md) |
@@ -126,7 +128,15 @@ chmod +x run.sh
 ```
 *Output: `TOTAL COMPOSITE SCORE: 1000/1000 | ALL 5 SCENARIOS PASSED`*
 
-### 3. Launch the Interactive Visualizer Dashboard
+### 3. Run the Live Google Cloud + NVIDIA Synergy Pipeline
+
+```bash
+# Execute the joint NVIDIA NIM + GCP (Cloud Run, Firestore, Storage, BigQuery) demo:
+./run.sh --cloud-demo
+```
+*Output: Grounded clinical reasoning via NVIDIA NIM + Firestore sync + GCS audit + BigQuery feed.*
+
+### 4. Launch the Interactive Visualizer Dashboard
 
 ```bash
 # Launch the live dark-mode dashboard (USSD dialer, consensus engine & MCP visualizer):

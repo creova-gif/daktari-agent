@@ -17,6 +17,9 @@ elif [ "$1" = "--benchmark" ]; then
 elif [ "$1" = "--simulate" ]; then
     shift
     exec python3 tests/dispensary_simulator.py "$@"
+elif [ "$1" = "--cloud-demo" ] || [ "$1" = "--gcp-nvidia" ]; then
+    shift
+    exec python3 -m gauntlet_agent.cloud_synergy "$@"
 fi
 
 exec python3 run_agent.py "$@"
