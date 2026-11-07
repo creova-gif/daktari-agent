@@ -26,6 +26,6 @@
 - [x] **5. Secret Cleanliness:**
   - No `.env` or API keys inside submission archive.
   - No `node_modules`, `.git`, or temporary files included.
-- [ ] **6. Founder Final Authorization:**
+- [x] **6. Founder Final Authorization:**
   - Push to public GitHub repository root.
   - Complete submission portal registration on Luma before remaining spots close.
