@@ -20,6 +20,7 @@
 
 | Deliverable | Description | Link |
 | :--- | :--- | :--- |
+| **Post-Competition Summary & Transition** | Full retrospective, benchmark results, and production transition roadmap. | [`POST_COMPETITION_SUMMARY.md`](./POST_COMPETITION_SUMMARY.md) |
 | **Pan-African Expansion Architecture** | Scaling clinical AI to 1.2M CHWs across 48 Sub-Saharan African countries with USSD, stockout fallbacks, and 7-language NLP. | [`PAN_AFRICAN_EXPANSION.md`](./PAN_AFRICAN_EXPANSION.md) |
 | **Google Cloud + NVIDIA Synergy** | Deep technical breakdown of Cloud Run, Firestore, GCS, BigQuery, and NVIDIA NIM Llama 70B. | [`GOOGLE_CLOUD_NVIDIA_SYNERGY.md`](./GOOGLE_CLOUD_NVIDIA_SYNERGY.md) |
 | **GStack CEO Plan Review** | Founder-mode selective expansion review across 11 architectural dimensions. | [`CEO_PLAN_REVIEW.md`](./CEO_PLAN_REVIEW.md) |

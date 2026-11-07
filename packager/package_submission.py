@@ -38,6 +38,7 @@ def package(agent_id: str = "daktari-agent-gauntlet", output_dir: str = ".") -> 
         "requirements.txt",
         "Dockerfile",
         "README.md",
+        "POST_COMPETITION_SUMMARY.md",
         "WRITTEN_SUMMARY.md",
         "PRESENTATION_DECK.md",
         "CEO_PLAN_REVIEW.md",
