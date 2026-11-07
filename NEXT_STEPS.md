@@ -6,9 +6,9 @@
 - [x] Create simulated Black Box practice arena (`tests/mock_blackbox_server.py`).
 - [x] Verify end-to-end execution and safety clamps via unit test suite (`tests/test_agent_e2e.py`).
 - [x] Implement packager (`packager/package_submission.py`) and validator (`packager/verify_submission.py`).
-- [ ] Run `python3 packager/package_submission.py` to generate `<agent-id>-submission.tar.gz` and `.sha256`.
-- [ ] Push to individual public GitHub repository.
-- [ ] Finalize Luma registration entry with public repository link.
+- [x] Run `python3 packager/package_submission.py` to generate `<agent-id>-submission.tar.gz` and `.sha256`.
+- [x] Push to individual public GitHub repository.
+- [x] Finalize Luma registration entry with public repository link.
 
 ---
 
