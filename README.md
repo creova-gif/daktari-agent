@@ -25,7 +25,7 @@
 - **Safety layer**: prompt-injection filtering and credential redaction on tool output (`gauntlet_agent/safety.py`).
 - **Low-connectivity channels**: USSD gateway, bit-packed SMS with Fletcher-16 checksums, store-and-forward queue.
 - **Swahili and pan-African keyword spotting** for local medical terms (e.g. *degedege*).
-- **Model providers**: NVIDIA NIM (Llama 3.1 70B), Anthropic or OpenAI, selected with `GAUNTLET_MODEL_PROVIDER`.
+- **Model providers**: NVIDIA NIM (Llama 3.1 70B) by default, or OpenAI, selected with `GAUNTLET_MODEL_PROVIDER`; falls back to offline rules without a key.
 - **Expo / React Native app** (`App.tsx`, `src/`) for health workers.
 
 > **Note:** the benchmark suite and Black Box arena run against local mock servers in `tests/`; scores are simulated, not field results.
@@ -144,7 +144,8 @@ All settings are environment variables (see [`.env.example`](./.env.example)). W
 | Variable | Purpose |
 | :--- | :--- |
 | `GAUNTLET_MODEL_PROVIDER` | Model backend (default `nvidia_nim`; see `gauntlet_agent/models.py` for other providers) |
-| `NVIDIA_API_KEY` / `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` | Credentials for the chosen provider |
+| `NVIDIA_API_KEY` / `OPENAI_API_KEY` | Credentials for the chosen provider |
+| `ANTHROPIC_API_KEY` | Server-side Claude calls (e.g. USSD triage) |
 | `MCP_SERVER_COMMAND` / `MCP_SERVER_URL` | How to reach the MCP tool server |
 | `GAUNTLET_LOG_LEVEL` | Log verbosity |
 | `GOOGLE_CLOUD_PROJECT`, `CLOUD_RUN_REGION`, `GCS_AUDIT_BUCKET` | Google Cloud integration |
