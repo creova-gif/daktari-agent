@@ -1,10 +1,12 @@
 # 🩺 Daktari AI
+
+**An MCP-based clinical triage agent (WHO IMCI/IMPAC) for community health workers in Tanzania, built for the Google Cloud × NVIDIA Agent Gauntlet.**
+
 ### Joint Google Cloud & NVIDIA Developer Agent Gauntlet Submission (November 2026)
 **Autonomous MCP Agent Architecture · UN SDG 3 Social Impact · Frontline Clinical Augmentation**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI/CD](https://github.com/creova-gif/daktari-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/creova-gif/daktari-agent/actions)
-[![Benchmark Score](https://img.shields.io/badge/Benchmark-1000%2F1000%20PASS-brightgreen.svg)](./EVALUATION.md)
+[![Benchmark Score](https://img.shields.io/badge/Simulated%20benchmark-1000%2F1000-brightgreen-brightgreen.svg)](./EVALUATION.md)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![NVIDIA NIM](https://img.shields.io/badge/NVIDIA-NIM%20API-76B900.svg)](https://build.nvidia.com)
 [![Google Cloud](https://img.shields.io/badge/Google%20Cloud-Cloud%20Run%20%2B%20Storage-4285F4.svg)](https://cloud.google.com/run)
@@ -13,6 +15,23 @@
 
 > **Msaidizi wa Kliniki wa AI kwa Wahudumu wa Jamii Tanzania**  
 > *AI Clinical Intelligence for Tanzania Community Health Workers & Autonomous MCP Competition Runner*
+
+---
+
+## ✨ Key Features
+
+- **Autonomous MCP agent** (`gauntlet_agent/`): discovers tools over JSON-RPC 2.0 and runs a plan → act → verify loop with an execution governor.
+- **Clinical triage** following WHO IMCI (children) and IMPAC (maternal) protocols, with a tri-agent consensus check.
+- **Safety layer**: prompt-injection filtering and credential redaction on tool output (`gauntlet_agent/safety.py`).
+- **Low-connectivity channels**: USSD gateway, bit-packed SMS with Fletcher-16 checksums, store-and-forward queue.
+- **Swahili and pan-African keyword spotting** for local medical terms (e.g. *degedege*).
+- **Model providers**: NVIDIA NIM (Llama 3.1 70B) by default, or OpenAI, selected with `GAUNTLET_MODEL_PROVIDER`; falls back to offline rules without a key.
+- **Expo / React Native app** (`App.tsx`, `src/`) for health workers.
+
+> **Note:** the benchmark suite and Black Box arena run against local mock servers in `tests/`; scores are simulated, not field results.
+
+<!-- TODO: replace with a real screenshot or GIF of the dashboard or mobile app -->
+<p align="center"><img src="docs/images/dashboard-placeholder.svg" alt="Daktari dashboard screenshot (placeholder)" width="720" /></p>
 
 ---
 
@@ -101,10 +120,38 @@ Both Google Cloud and NVIDIA technologies are deeply integrated into Daktari AI'
 ## 🚀 Setup & Execution Guide
 
 ### Prerequisites
-- Python 3.12+
+- Python 3.10+ (CI runs 3.10, 3.11 and 3.12; the Docker image uses 3.12)
+- Node.js 18+ and npm, only for the Expo mobile app
 - `curl` / `git`
 - (Optional) Docker for Cloud Run containerization
 - (Optional) `NVIDIA_API_KEY` for live NIM inference
+
+### Installation
+
+```bash
+git clone https://github.com/creova-gif/daktari-agent.git
+cd daktari-agent
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt   # optional: core agent and tests run on the standard library
+cp .env.example .env              # then fill in the keys you need
+npm install                       # only for the Expo mobile app
+```
+
+### Configuration
+
+All settings are environment variables (see [`.env.example`](./.env.example)). Without any keys the agent runs in offline/mock mode.
+
+| Variable | Purpose |
+| :--- | :--- |
+| `GAUNTLET_MODEL_PROVIDER` | Model backend (default `nvidia_nim`; see `gauntlet_agent/models.py` for other providers) |
+| `NVIDIA_API_KEY` / `OPENAI_API_KEY` | Credentials for the chosen provider |
+| `ANTHROPIC_API_KEY` | Server-side Claude calls (e.g. USSD triage) |
+| `MCP_SERVER_COMMAND` / `MCP_SERVER_URL` | How to reach the MCP tool server |
+| `GAUNTLET_LOG_LEVEL` | Log verbosity |
+| `GOOGLE_CLOUD_PROJECT`, `CLOUD_RUN_REGION`, `GCS_AUDIT_BUCKET` | Google Cloud integration |
+| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Server-side Supabase access |
+| `AFRICA_TALKING_API_KEY`, `AFRICA_TALKING_USERNAME` | USSD/SMS gateway |
+| `EXPO_PUBLIC_*` | Mobile app settings (never put secrets in these; they ship in the app bundle) |
 
 ### 1. Quickstart — Executing via Grader Entrypoint
 
@@ -269,7 +316,20 @@ daktari-agent/
 
 ---
 
+## 🤝 Contributing
+
+Contributions are welcome. See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and our [Code of Conduct](./CODE_OF_CONDUCT.md).
+
+---
+
+## 💬 Support
+
+- Bugs and questions: [open an issue](https://github.com/creova-gif/daktari-agent/issues)
+- Security or patient-safety issues: email creativeinnovationspace@gmail.com (see [`SECURITY_AND_SAFETY.md`](./SECURITY_AND_SAFETY.md))
+
+---
+
 ## 📜 License & Disclaimers
 
-- **License:** Open-source under the [MIT License](./LICENSE).
+- **License:** not yet published. A `LICENSE` file has not been added to this repository, so all rights are reserved until one is.
 - **Clinical Disclaimer:** Daktari AI is an investigational decision-support research project. It does not replace certified physician judgement. Formal deployment in clinical settings is subject to ethics review by the National Institute for Medical Research (NIMR) and Tanzania Medicines and Medical Devices Authority (TMDA).
