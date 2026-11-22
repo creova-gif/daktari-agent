@@ -117,20 +117,6 @@ Both Google Cloud and NVIDIA technologies are deeply integrated into Daktari AI'
 
 ---
 
-## 🧰 Tech Stack
-
-| Layer | Technology | Version |
-|---|---|---|
-| Agent / server | Python | 3.10–3.12 (CI matrix); Docker `python:3.12-slim` |
-| LLM APIs | Anthropic Python SDK | ≥0.39 |
-| Data / auth | Supabase Python client | ≥2.4 |
-| Numerics | NumPy | ≥1.26 |
-| Mobile client | Expo SDK, React Native, React | 51, 0.74.2, 18.2.0 |
-| Mobile language | TypeScript | ^5.3 |
-| Mobile data | `@supabase/supabase-js`, `@anthropic-ai/sdk` | ^2.43, ^0.39 |
-
-Versions come from `requirements.txt`, `package.json` and `Dockerfile`.
-
 ## 🚀 Setup & Execution Guide
 
 ### Prerequisites
