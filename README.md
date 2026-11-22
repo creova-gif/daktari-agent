@@ -331,5 +331,5 @@ Contributions are welcome. See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and our [C
 
 ## 📜 License & Disclaimers
 
-- **License:** not yet published. A `LICENSE` file has not been added to this repository, so all rights are reserved until one is.
+- **License:** [MIT](LICENSE).
 - **Clinical Disclaimer:** Daktari AI is an investigational decision-support research project. It does not replace certified physician judgement. Formal deployment in clinical settings is subject to ethics review by the National Institute for Medical Research (NIMR) and Tanzania Medicines and Medical Devices Authority (TMDA).
