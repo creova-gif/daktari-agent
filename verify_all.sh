@@ -47,8 +47,9 @@ echo ""
 
 # 6. Run Packaging & Verification
 echo "▶ STEP 6/6: Packaging Competition Artifacts & Verifying Secret Hygiene..."
-python3 packager/package_submission.py daktari-agent-gauntlet .
-python3 packager/verify_submission.py daktari-agent-gauntlet .
+python3 packager/package_submission.py daktari-agent-gauntlet /tmp
+python3 packager/verify_submission.py daktari-agent-gauntlet /tmp
+rm -f /tmp/daktari-agent-gauntlet-submission.tar.gz /tmp/daktari-agent-gauntlet-submission.tar.gz.sha256
 echo "✔ Step 6 Passed: Checksum & Archive Validated."
 echo ""
 

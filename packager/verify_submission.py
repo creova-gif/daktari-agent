@@ -51,16 +51,17 @@ def verify(agent_id: str = "daktari-agent-gauntlet", directory: str = ".") -> bo
         "run.sh",
         "requirements.txt",
         "README.md",
-        "WRITTEN_SUMMARY.md",
-        "PRESENTATION_DECK.md",
-        "CEO_PLAN_REVIEW.md",
-        "GOOGLE_CLOUD_NVIDIA_SYNERGY.md",
-        "PAN_AFRICAN_EXPANSION.md"
+        "docs/competition/WRITTEN_SUMMARY.md",
+        "docs/competition/PRESENTATION_DECK.md",
+        "docs/competition/CEO_PLAN_REVIEW.md",
+        "docs/competition/GOOGLE_CLOUD_NVIDIA_SYNERGY.md",
+        "docs/competition/PAN_AFRICAN_EXPANSION.md"
     ]
     found_entries = set()
 
     with tarfile.open(tar_path, "r:gz") as tar:
         for member in tar.getmembers():
+            found_entries.add(member.name)
             found_entries.add(member.name.split("/")[0])
             for forbidden in forbidden_markers:
                 if forbidden in member.name:

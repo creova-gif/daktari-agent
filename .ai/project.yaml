@@ -1,0 +1,14 @@
+name: daktari-agent
+owner: creova-gif
+
+stack:
+  language: [python, typescript]
+  framework: [mcp, react-native, expo]
+
+# null = no command configured -> agents MUST report NOT VERIFIED for that gate
+verification:
+  install: pip install -r requirements.txt
+  lint: null
+  typecheck: null
+  test: ./verify_all.sh
+  build: python3 -m py_compile run_agent.py federated_aggregation.py gauntlet_agent/*.py tests/*.py packager/*.py

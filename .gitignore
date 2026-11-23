@@ -51,6 +51,9 @@ wheels/
 *.swp
 *.swo
 
-# DO NOT IGNORE the competition submission artifacts
-!daktari-agent-gauntlet-submission.tar.gz
-!daktari-agent-gauntlet-submission.tar.gz.sha256
+# Local Databases & Archives
+*.db
+*.sqlite
+*.sqlite3
+*.tar.gz
+*.tar.gz.sha256
