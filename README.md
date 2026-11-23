@@ -7,6 +7,13 @@
 [![Python 3.10–3.12](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://www.python.org/)
 [![Protocol: MCP](https://img.shields.io/badge/Protocol-MCP%20JSON--RPC%202.0-green.svg)](https://modelcontextprotocol.io/)
 
+![Expo](https://img.shields.io/badge/Expo-000020?logo=expo&logoColor=white)
+![React Native](https://img.shields.io/badge/React_Native-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![NVIDIA NIM](https://img.shields.io/badge/NVIDIA_NIM-76B900?logo=nvidia&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?logo=supabase&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+
 > [!IMPORTANT]
 > **Investigational Research & Implementation Honesty Notice:**
 > Daktari Agent is an **investigational software prototype and MCP safety architecture**, not an approved medical device. See [**IMPLEMENTATION_STATUS.md**](./IMPLEMENTATION_STATUS.md) for the complete module-by-module audit:
