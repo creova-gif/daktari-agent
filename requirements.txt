@@ -3,10 +3,10 @@
 # Direct dependencies are pinned so builds are reproducible; Dependabot bumps the pins.
 # numpy stays on 2.2.x while CI tests Python 3.10 (numpy 2.3 needs 3.11+).
 
-supabase==2.33.0
-numpy==2.2.6
+supabase==2.34.1
+numpy==2.5.5
 python-dotenv==1.2.4
-anthropic==2.8.0   # for server-side Claude API calls (USSD triage, etc.)
+anthropic==2.11.0   # for server-side Claude API calls (USSD triage, etc.)
 
 # Optional — for production LoRA weight aggregation:
 # torch>=2.2.0
